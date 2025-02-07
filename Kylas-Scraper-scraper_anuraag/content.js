@@ -1,5 +1,5 @@
 (async function scrapeLinkedInProfile() {
-    console.log("ğŸ”� Scraping LinkedIn Profile...");
+    console.log("Scraping LinkedIn Profile...");
 
     // Scroll smoothly to load all content
     await new Promise((resolve) => {
@@ -93,13 +93,14 @@ function extractProfileData(responseContent) {
   const name = responseContent.match(/Name:\s*([^\n]*)/)?.[1];
   const headline = responseContent.match(/Headline:\s*([^\n]*)/)?.[1];
   const location = responseContent.match(/Location:\s*([^\n]*)/)?.[1];
-
+  const url= window.location.href;
   // Extract the experience section
 
 
   const experience = responseContent.match(/Experience:\s*(.+)$/s)?.[1]?.trim();
   // Return the extracted data
   return {
+    url,
     name,
     headline,
     location,
