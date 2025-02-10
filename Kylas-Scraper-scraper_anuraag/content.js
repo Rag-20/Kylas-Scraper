@@ -60,7 +60,7 @@ async function sendToGroq(extractedData) {
     messages: [
       {
         role: "system",
-        content: "You are a LinkedIn scraper that extracts name, headline, location, and experience with company name as its parameter from a given text."
+        content: "You are a LinkedIn scraper that extracts first name,last name,company name,city,state,country,industry,keywords in headline, location, and experience with company name as its parameter from a given text in json format."
       },
       {
         role: "user",
@@ -82,28 +82,19 @@ async function sendToGroq(extractedData) {
 
   if (response.ok) {
     const result = await response.json();
-    console.log('Groq Response:', extractProfileData(result.choices[0].message.content));
+
+    const resultText=result.choices[0].message.content;
+    const jsonText=resultText.slice(resultText.indexOf("{"), resultText.lastIndexOf("}") + 1);
+
+    let jsonObject=JSON.parse(jsonText);
+    jsonObject.linkedin_url=window.location.href;
+    console.log(jsonText);
+console.log(jsonObject);
+   // console.log('Groq Response:', extractProfileData(result.choices[0].message.content));
   } else {
     console.error('Error calling Groq API:', response.statusText);
   }
 }
 
-function extractProfileData(responseContent) {
-  // Use regular expressions to extract name, headline, and location
-  const name = responseContent.match(/Name:\s*([^\n]*)/)?.[1];
-  const headline = responseContent.match(/Headline:\s*([^\n]*)/)?.[1];
-  const location = responseContent.match(/Location:\s*([^\n]*)/)?.[1];
-  const url= window.location.href;
-  // Extract the experience section
 
 
-  const experience = responseContent.match(/Experience:\s*(.+)$/s)?.[1]?.trim();
-  // Return the extracted data
-  return {
-    url,
-    name,
-    headline,
-    location,
-    experience
-  };
-}
