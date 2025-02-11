@@ -1,32 +1,35 @@
-(async function scrapeLinkedInProfile() {
-    console.log("Scraping LinkedIn Profile...");
+(function () {
+    let lastUrl = location.href; // Store the initial URL
 
-    // Scroll smoothly to load all content
-    await new Promise((resolve) => {
-        let totalHeight = 0;
-        const distance = 300;
-        const timer = setInterval(() => {
-            window.scrollBy(0, distance);
-            totalHeight += distance;
+    function scrapeLinkedInProfile() {
+        console.log("Scraping LinkedIn Profile...");
 
-            if (totalHeight >= document.body.scrollHeight) {
-                clearInterval(timer);
-                resolve();
-            }
-        }, 500);
-    });
-    // Extract all text from the page
-    const scrapedText =  document.body.innerText;
-//    console.log(scrapedText);
+        // Extract all text from the profile page
+        const scrapedText = document.body.innerText;
 
-//    const apiUrl = "https://api.groq.com/openai/v1/chat/completions";  // Replace with actual Groq API URL
-//    const apiKey = "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"; // Replace with your API key
+        // Process and filter the extracted text
+        let extractedText = extractUntilContactInfo(scrapedText);
 
-    let extractedText= extractUntilContactInfo(scrapedText);
-//    console.log(extractedText);
-    await sendToGroq(extractedText);
+        // Send extracted text to Groq API (or handle it as needed)
+        sendToGroq(extractedText);
+    }
 
+    // Function to check for URL changes
+    function checkUrlChange() {
+        const currentUrl = location.href;
+        if (currentUrl !== lastUrl) {
+            console.log("Profile URL changed, scraping new profile...");
+            lastUrl = currentUrl;
+            scrapeLinkedInProfile();
+        }
+    }
+
+    // Monitor URL changes using setInterval (every 1 second)
+    setInterval(checkUrlChange, 1000);
+
+    console.log("Monitoring LinkedIn profile URL changes...");
 })();
+
 
 function extractUntilContactInfo(text) {
         // Regular expression to capture everything from the start until "Contact info"
@@ -88,8 +91,8 @@ async function sendToGroq(extractedData) {
 
     let jsonObject=JSON.parse(jsonText);
     jsonObject.linkedin_url=window.location.href;
-    console.log(jsonText);
-console.log(jsonObject);
+    //console.log(jsonText);
+    console.log(jsonObject);
    // console.log('Groq Response:', extractProfileData(result.choices[0].message.content));
   } else {
     console.error('Error calling Groq API:', response.statusText);
