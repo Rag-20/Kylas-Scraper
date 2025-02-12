@@ -1,18 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LinkedIn Scraper</title>
     <style>
-        body { font-family: Arial, sans-serif; width: 200px; text-align: center; }
-        button { background: #0073b1; color: white; border: none; padding: 10px; cursor: pointer; width: 100%; }
-        button:hover { background: #005582; }
+        body { font-family: Arial, sans-serif; padding: 20px; width: 300px; text-align: center; }
+        .profile-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 10px;
+            background: white;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            display: block;
+        }
+        .profile-card h2 { margin: 0; color: #0073b1; }
+        .profile-card p { margin: 5px 0; font-size: 14px; }
+        .scrape-btn, .enhance-btn, .push-btn {
+            background: #0073b1;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .scrape-btn:disabled, .enhance-btn:disabled, .push-btn:disabled { background: #ccc; cursor: not-allowed; }
     </style>
-
 </head>
 <body>
-<h3>LinkedIn Scraper</h3>
-<button id="scrapeBtn">Scrape Profile</button>
-<p id="status"></p>
-<script src="popup.js"></script>
+
+    <button id="scrapeBtn" class="scrape-btn">Scrape Data</button>
+
+    <div id="profileContainer" class="profile-card">
+        <h2 id="name">N/A</h2>
+        <p><strong>Company:</strong> <span id="company">N/A</span></p>
+        <p><strong>City:</strong> <span id="city">N/A</span></p>
+        <p><strong>State:</strong> <span id="state">N/A</span></p>
+        <p><strong>Country:</strong> <span id="country">N/A</span></p>
+        <p><strong>LinkedIn URL:</strong> <span id="linkedIn">N/A</span></p>
+        <p><strong>Email:</strong> <span id="email">N/A</span></p>
+        <p><strong>Phone:</strong> <span id="phone">N/A</span></p>
+    </div>
+
+     <button id="enhanceBtn" class="scrape-btn">Enhance Data</button>
+    <button id="pushBtn" class="push-btn" disabled>Push to Kylas</button>
+
+    <script src="popup.js"></script>
+
 </body>
 </html>
